@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:lang="http://www.springframework.org/schema/lang"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.3.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+	<!-- Root Context: defines shared resources visible to all other web components -->
+
+					
+					<!-- 데이터베이스 연결 --> 
+					<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+						<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+						<property name="url" value="jdbc:oracle:thin:@127.0.0.1:1521:xe" /> 
+						<property name="username" value="enixclever"/> 
+						<property name="password" value="enixone"/> 
+					</bean> 
+					
+					
+					<!-- mybatis-spring -->
+					<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+						<property name="dataSource" ref="dataSource"></property>
+						<property name="configLocation" value="classpath:/mybatis-config.xml"></property>
+						<property name="mapperLocations" value="classpath:/mappers/Ec_documentMapper.xml"></property> 
+					</bean>
+					
+					
+					<!-- transaction 처리를 위한 객체 선언 : 자동생성된다. -->
+					<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+						<property name="dataSource" ref="dataSource"></property>
+					</bean>
+					
+					<!-- 아노테이션 기반의 트랜잭션을 사용합니다. --> 
+						<tx:annotation-driven/>
+						<task:annotation-driven/>
+						<context:annotation-config/>
+					
+					<!-- mybatis 프로그램을 자동으로 작성하기 위해 scan -->
+					<mybatis-spring:scan base-package="com.enixclever.ec_document.mapper"/>
+					
+					
+					</beans>
+
